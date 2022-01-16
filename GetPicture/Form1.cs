@@ -42,7 +42,7 @@ namespace GetPicture
             worker = new BackgroundWorker();
 
             browser = new WebBrowser();
-             
+
 
             worker.DoWork += Worker_DoWork;
             worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
@@ -120,52 +120,50 @@ namespace GetPicture
             //{
             //    Captcha(html);
             //        }
-            //else
-                    
+            //else                     
 
             try
-            {                
-
-            var ProductHtml = htmlDocument.DocumentNode.Descendants("div")
-                .Where(node => node.GetAttributeValue("class", "")
-                .Equals("page-layout__content-wrapper b-page__content")).ToList();
-
-                
-
-            var ProductlistItems = ProductHtml[0].Descendants("div")
-                .Where(node => node.GetAttributeValue("class", "")
-            int i = 0;
-
-            LV.LargeImageList = ImgList;
-            ImgList.ColorDepth = ColorDepth.Depth32Bit;
-            //Список
-            foreach (var picitem in ProductlistItems)
             {
-                //Картинка 
-                var picture_preview_url = picitem.Descendants("img").FirstOrDefault().GetAttributeValue("src", "");
-                var picture_url = picitem.Descendants("a").FirstOrDefault().GetAttributeValue("href", "");
-                //Logs
-                prev_links.Add("https:" + picture_preview_url);
-                ImgList.Images.Add(LoadImage(prev_links[i]));
-                pic_size.Add(picitem.InnerText.Replace("&nbsp;", "").Replace("HD", ""));
-                ListViewItem litem = new ListViewItem(new string[] { picitem.InnerText.Replace("&nbsp;", "").Replace("HD", "") });
-                litem.ImageIndex = i;
+
+                var ProductHtml = htmlDocument.DocumentNode.Descendants("div")
+                    .Where(node => node.GetAttributeValue("class", "")
+                    .Equals("page-layout__content-wrapper b-page__content")).ToList();
+
+                var ProductlistItems = ProductHtml[0].Descendants("div")
+                        .Where(node => node.GetAttributeValue("class", "")
+                        .Contains("serp-item__preview")).Take(max);
+                int i = 0;
+
+                LV.LargeImageList = ImgList;
+                ImgList.ColorDepth = ColorDepth.Depth32Bit;
+                //Список
+                foreach (var picitem in ProductlistItems)
+                {
+                    //Картинка 
+                    var picture_preview_url = picitem.Descendants("img").FirstOrDefault().GetAttributeValue("src", "");
+                    var picture_url = picitem.Descendants("a").FirstOrDefault().GetAttributeValue("href", "");
+                    //Logs
+                    prev_links.Add("https:" + picture_preview_url);
+                    ImgList.Images.Add(LoadImage(prev_links[i]));
+                    pic_size.Add(picitem.InnerText.Replace("&nbsp;", "").Replace("HD", ""));
+                    ListViewItem litem = new ListViewItem(new string[] { picitem.InnerText.Replace("&nbsp;", "").Replace("HD", "") });
+                    litem.ImageIndex = i;
 
 
-                
-                LV.Items.Add(litem);
-                var ulink = System.Uri.UnescapeDataString(picture_url);
-                i++;
+
+                    LV.Items.Add(litem);
+                    var ulink = System.Uri.UnescapeDataString(picture_url);
+                    i++;
                     Text = $"GetPicture" + $" | получаем {i} изображений";
-                   
-                if (i == max)
-                    break;
+
+                    if (i == max)
+                        break;
+                }
             }
-        }
             catch (Exception ex)
             {
                 Text = "GetPicture" + " | Забанили на Яндексе, перерыв 5 минут";
-               // Captcha(item);
+                // Captcha(item);
             }
         }
 
@@ -181,7 +179,7 @@ namespace GetPicture
             box.LoadAsync(p_url);
             box.SizeMode = PictureBoxSizeMode.StretchImage;
             box.Click += delegate { view.Close(); };
-            
+
         }
 
         private Image LoadImage(string url)
@@ -205,7 +203,7 @@ namespace GetPicture
             }
             else
             {
-                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(Application.ProductName,"er", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }
@@ -217,11 +215,11 @@ namespace GetPicture
                 pic_index = LV.Items.IndexOf(LV.SelectedItems[0]);
             string pic_url = prev_links[pic_index].ToString();
             var undecodedlink = links[pic_index].ToString();
-            var decodelink = System.Uri.UnescapeDataString(undecodedlink)
+            var decodelink = System.Uri.UnescapeDataString(undecodedlink);
 
             string[] s = pic_size[pic_index].Split('×');
             width_pic = s[0];
-            height_pic = s[1];  
+            height_pic = s[1];
         }
 
         private void linkbox_Click(object sender, EventArgs e)
@@ -231,8 +229,8 @@ namespace GetPicture
         }
 
         private void downloadbtn_Click(object sender, EventArgs e)
-        {               
-             worker.RunWorkerAsync();
+        {
+            worker.RunWorkerAsync();
         }
 
         private void clearbtn_Click(object sender, EventArgs e)
@@ -260,7 +258,7 @@ namespace GetPicture
 
         public void CheckCaptcha(string s)
         {
-           // Invoke(() => this.Text = "Задержка между запросами " + searchdelay.ToString() + "c.");
+            // Invoke(() => this.Text = "Задержка между запросами " + searchdelay.ToString() + "c.");
             string url = "https://yandex.ru/images/search?text=" + s;
             var req = (HttpWebRequest)WebRequest.Create(url);
             req.AllowAutoRedirect = true;//Разрешаем автоматический редирект
@@ -290,7 +288,7 @@ namespace GetPicture
             //если в запросе попалась капча - увеличиваем выдержку между запросами
             if (nodes != null)
             {
-               // Properties.Settings.Default.searchdelay = ++searchdelay;
+                // Properties.Settings.Default.searchdelay = ++searchdelay;
                 Properties.Settings.Default.Save();
             }
 
@@ -307,7 +305,7 @@ namespace GetPicture
                     //Получаем URL картинки капчи (путь по которому её можно скачать)
                     string url_captcha = image.GetAttributeValue("src", "true");
                     //Создаем форму ввода капчи
-                    Form formCaptcha = new Form(); 
+                    Form formCaptcha = new Form();
                     formCaptcha.Show();
                     formCaptcha.StartPosition = FormStartPosition.CenterScreen;
                     //Отображаем в PictureBox на форме картинку капчи
@@ -315,12 +313,12 @@ namespace GetPicture
                     formCaptcha.Controls.Add(pictureBox1);
                     pictureBox1.ImageLocation = url_captcha;
                     //устанавливаем время автозакрытия окна ввода капчи
-                   // formCaptcha.captchadelay = captchadelay;
+                    // formCaptcha.captchadelay = captchadelay;
                     //Отображаем форму ввода капчи для пользователя
                     TextBox tbPassword = new TextBox();
                     formCaptcha.Controls.Add(tbPassword);
-                    
-                    
+
+
                     //если капча была введена
                     if (tbPassword.Text != "")
                     {
@@ -352,7 +350,7 @@ namespace GetPicture
                         }
                         catch (Exception ex)
                         {
-                           // InvokeIfNeeded(() => LogException("Отправка кода капчи: ", ex, dt_exceptions));
+                            // InvokeIfNeeded(() => LogException("Отправка кода капчи: ", ex, dt_exceptions));
                             url = "https://yandex.ru/images/search?text=" + s;
                         }
                     }
@@ -373,12 +371,12 @@ namespace GetPicture
                 //если капча присутствует, то цикл продолжится 
                 nodes = doc.DocumentNode.SelectNodes("//div[@class='form form_state_image form_error_no form_audio_yes i-bem']");
                 //автоматически увеличиваем время задержки капчи, если капча после задержки опять вылезла, сохраняем настройки
-                if (nodes != null) 
-                //Properties.Settings.Default.captchadelay = ++captchadelay;
-                Properties.Settings.Default.Save();
+                if (nodes != null)
+                    //Properties.Settings.Default.captchadelay = ++captchadelay;
+                    Properties.Settings.Default.Save();
             }
             sr.Close();
-           // return html;
+            // return html;
         }
 
         private void timeout_Tick(object sender, EventArgs e)
@@ -398,8 +396,8 @@ namespace GetPicture
             if (nodes != null)
             {
                 //HtmlNode image = htmldoc.DocumentNode.SelectSingleNode("//div[@class='Captcha']//img");
-              //  var url_image = image.GetAttributeValue("src", "");
-                Form captcha = new Form();                 
+                //  var url_image = image.GetAttributeValue("src", "");
+                Form captcha = new Form();
                 captcha.Text = cap;
                 captcha.FormBorderStyle = FormBorderStyle.FixedDialog;
                 captcha.MinimizeBox = false;
@@ -426,18 +424,18 @@ namespace GetPicture
                 //PictureBox box = new PictureBox();
                 //box.LoadAsync("");
 
-               // captcha.Controls.Add(box);
+                // captcha.Controls.Add(box);
                 captcha.Controls.Add(labcap);
                 captcha.Controls.Add(okbtn);
-               // captcha.Controls.Add(browser);
-                
+                // captcha.Controls.Add(browser);
+
             }
         }
 
         private async void Okbtn_Click(object sender, EventArgs e)
         {
             string postdata = "/checkcaptcha?key=ea385719-4d32722f-16457e4f-a5fdaa82_2/1642343712/4fded01a60cbdc10b27a13d4f08abd7f_4e6686042915f593ab1f01ffb6019ba3&";
-               var encoding = System.Text.Encoding.UTF8;
+            var encoding = System.Text.Encoding.UTF8;
             byte[] bytes = encoding.GetBytes(postdata);
             string url = "";
             browser.Navigate(url, string.Empty, bytes, "Content-Type: application/x-www-form-urlencoded");
