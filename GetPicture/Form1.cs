@@ -126,50 +126,42 @@ namespace GetPicture
             try
             {                
 
-                var ProductHtml = htmlDocument.DocumentNode.Descendants("div")
-                    .Where(node => node.GetAttributeValue("class", "")
-                    .Equals("page-layout__content-wrapper b-page__content")).ToList();
+            var ProductHtml = htmlDocument.DocumentNode.Descendants("div")
+                .Where(node => node.GetAttributeValue("class", "")
+                .Equals("page-layout__content-wrapper b-page__content")).ToList();
 
                 
 
-                var ProductlistItems = ProductHtml[0].Descendants("div")
-                    .Where(node => node.GetAttributeValue("class", "")
-                    .Contains("serp-item__preview")).Take(max);
-                int i = 0;
+            var ProductlistItems = ProductHtml[0].Descendants("div")
+                .Where(node => node.GetAttributeValue("class", "")
+            int i = 0;
 
-                LV.LargeImageList = ImgList;
-                LV.LargeImageList.ImageSize = new Size(120, 67);
-                ImgList.ColorDepth = ColorDepth.Depth32Bit;
-                //Список
-                foreach (var picitem in ProductlistItems)
-                {
-                    //Картинка 
-                    var picture_preview_url = picitem.Descendants("img").FirstOrDefault().GetAttributeValue("src", "");
-                    var picture_url = picitem.Descendants("a").FirstOrDefault().GetAttributeValue("href", "");
-                    //Logs
-                    prev_links.Add("https:" + picture_preview_url);
-                    ImgList.Images.Add(LoadImage(prev_links[i]));
-
-                    pic_size.Add(picitem.InnerText.Replace("&nbsp;", "").Replace("HD", ""));
-                    ListViewItem litem = new ListViewItem(new string[] { picitem.InnerText.Replace("&nbsp;", "").Replace("HD", "") });
-                    litem.ImageIndex = i;
+            LV.LargeImageList = ImgList;
+            ImgList.ColorDepth = ColorDepth.Depth32Bit;
+            //Список
+            foreach (var picitem in ProductlistItems)
+            {
+                //Картинка 
+                var picture_preview_url = picitem.Descendants("img").FirstOrDefault().GetAttributeValue("src", "");
+                var picture_url = picitem.Descendants("a").FirstOrDefault().GetAttributeValue("href", "");
+                //Logs
+                prev_links.Add("https:" + picture_preview_url);
+                ImgList.Images.Add(LoadImage(prev_links[i]));
+                pic_size.Add(picitem.InnerText.Replace("&nbsp;", "").Replace("HD", ""));
+                ListViewItem litem = new ListViewItem(new string[] { picitem.InnerText.Replace("&nbsp;", "").Replace("HD", "") });
+                litem.ImageIndex = i;
 
 
-
-                    LV.Items.Add(litem);
-                    var ulink = System.Uri.UnescapeDataString(picture_url);
-                    var nulink = ulink.Remove(ulink.LastIndexOf(".") + 4);
-                    listlinks.Items.Add(nulink.Replace($"/images/search?pos={i}&amp;img_url=", "")
-                        .Replace($"&amp;text={item}&amp;rpt=simage", ""));
-
-                    links.Add("https://www.yandex.ru" + nulink);
-                     i++;
+                
+                LV.Items.Add(litem);
+                var ulink = System.Uri.UnescapeDataString(picture_url);
+                i++;
                     Text = $"GetPicture" + $" | получаем {i} изображений";
                    
-                    if (i == max)
-                        break;
-                }
+                if (i == max)
+                    break;
             }
+        }
             catch (Exception ex)
             {
                 Text = "GetPicture" + " | Забанили на Яндексе, перерыв 5 минут";
@@ -189,10 +181,7 @@ namespace GetPicture
             box.LoadAsync(p_url);
             box.SizeMode = PictureBoxSizeMode.StretchImage;
             box.Click += delegate { view.Close(); };
-
-            view.Size = new Size(Convert.ToInt32(width_pic) / 2, Convert.ToInt32(height_pic) / 2);
-            view.Text = pic_size[pic_index].ToString();
-            // view.Text = pic_index.ToString();
+            
         }
 
         private Image LoadImage(string url)
@@ -216,7 +205,6 @@ namespace GetPicture
             }
             else
             {
-                MessageBox.Show(this, "Введите слово для поиска изображений!",
                     Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
@@ -230,17 +218,10 @@ namespace GetPicture
             string pic_url = prev_links[pic_index].ToString();
             var undecodedlink = links[pic_index].ToString();
             var decodelink = System.Uri.UnescapeDataString(undecodedlink)
-                .Replace($"https://www.yandex.ru/images/search?pos={pic_index}&amp;img_url=", "");
-            //.Replace($"&amp;text={slovo}&amp;rpt=simage", "")
-            //.Replace("&amp;lr=36", "");
-            string str = decodelink;
-            // MessageBox.Show(str);
 
             string[] s = pic_size[pic_index].Split('×');
             width_pic = s[0];
-            height_pic = s[1];
-
-            ViewFullPicture(str);
+            height_pic = s[1];  
         }
 
         private void linkbox_Click(object sender, EventArgs e)
@@ -250,8 +231,8 @@ namespace GetPicture
         }
 
         private void downloadbtn_Click(object sender, EventArgs e)
-        {
-            worker.RunWorkerAsync();
+        {               
+             worker.RunWorkerAsync();
         }
 
         private void clearbtn_Click(object sender, EventArgs e)

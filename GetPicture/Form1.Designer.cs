@@ -44,7 +44,14 @@ namespace GetPicture
             this.searchbtn = new System.Windows.Forms.Button();
             this.picname = new System.Windows.Forms.TextBox();
             this.LV = new System.Windows.Forms.ListView();
-            this.timeout = new System.Windows.Forms.Timer(this.components);
+            this.linkbox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.listlinks = new System.Windows.Forms.ListBox();
+            this.downloadbtn = new System.Windows.Forms.Button();
+            this.clearbtn = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.status = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -67,8 +74,6 @@ namespace GetPicture
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.progressBar1);
             this.panel1.Controls.Add(this.clearbtn);
             this.panel1.Controls.Add(this.downloadbtn);
@@ -81,7 +86,6 @@ namespace GetPicture
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(143, 612);
             this.panel1.TabIndex = 4;
             // 
             // progressBar1
@@ -171,10 +175,7 @@ namespace GetPicture
             this.searchbtn.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.searchbtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.searchbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.searchbtn.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.searchbtn.Location = new System.Drawing.Point(6, 42);
             this.searchbtn.Name = "searchbtn";
-            this.searchbtn.Size = new System.Drawing.Size(128, 23);
             this.searchbtn.TabIndex = 3;
             this.searchbtn.Text = "Поиск";
             this.searchbtn.UseVisualStyleBackColor = false;
@@ -182,11 +183,6 @@ namespace GetPicture
             // 
             // picname
             // 
-            this.picname.BackColor = System.Drawing.Color.DimGray;
-            this.picname.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picname.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.picname.Location = new System.Drawing.Point(5, 16);
-            this.picname.Margin = new System.Windows.Forms.Padding(5);
             this.picname.Name = "picname";
             this.picname.Size = new System.Drawing.Size(129, 20);
             this.picname.TabIndex = 2;
@@ -196,21 +192,68 @@ namespace GetPicture
             // 
             // LV
             // 
-            this.LV.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.LV.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.LV.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LV.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.LV.HideSelection = false;
-            this.LV.Location = new System.Drawing.Point(143, 0);
             this.LV.Name = "LV";
-            this.LV.Size = new System.Drawing.Size(930, 612);
             this.LV.TabIndex = 5;
             this.LV.UseCompatibleStateImageBehavior = false;
             this.LV.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LV_MouseClick);
             // 
-            // timeout
             // 
-            this.timeout.Tick += new System.EventHandler(this.timeout_Tick);
+            // 
+            // listlinks
+            // 
+            this.listlinks.FormattingEnabled = true;
+            this.listlinks.HorizontalScrollbar = true;
+            this.listlinks.Location = new System.Drawing.Point(15, 94);
+            this.listlinks.Name = "listlinks";
+            this.listlinks.Size = new System.Drawing.Size(126, 290);
+            this.listlinks.TabIndex = 7;
+            // 
+            // downloadbtn
+            // 
+            this.downloadbtn.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.downloadbtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.downloadbtn.Enabled = false;
+            this.downloadbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.downloadbtn.ForeColor = System.Drawing.SystemColors.Info;
+            this.downloadbtn.Location = new System.Drawing.Point(15, 416);
+            this.downloadbtn.Name = "downloadbtn";
+            this.downloadbtn.Size = new System.Drawing.Size(126, 23);
+            this.downloadbtn.TabIndex = 8;
+            this.downloadbtn.Text = "Скачать все";
+            this.downloadbtn.UseVisualStyleBackColor = false;
+            this.downloadbtn.Click += new System.EventHandler(this.downloadbtn_Click);
+            // 
+            // clearbtn
+            // 
+            this.clearbtn.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.clearbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.clearbtn.ForeColor = System.Drawing.SystemColors.Info;
+            this.clearbtn.Location = new System.Drawing.Point(15, 445);
+            this.clearbtn.Name = "clearbtn";
+            this.clearbtn.Size = new System.Drawing.Size(126, 23);
+            this.clearbtn.TabIndex = 9;
+            this.clearbtn.Text = "Очистить";
+            this.clearbtn.UseVisualStyleBackColor = false;
+            this.clearbtn.Click += new System.EventHandler(this.clearbtn_Click);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.progressBar1.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.progressBar1.Location = new System.Drawing.Point(15, 387);
+            this.progressBar1.Maximum = 30;
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(126, 23);
+            this.progressBar1.TabIndex = 10;
+            // 
+            // status
+            // 
+            this.status.Name = "status";
+            this.status.Size = new System.Drawing.Size(45, 17);
+            this.status.Text = "Готово";
             // 
             // Form1
             // 
