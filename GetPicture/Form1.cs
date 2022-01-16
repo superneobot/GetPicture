@@ -28,7 +28,7 @@ namespace GetPicture
         WebBrowser browser;
 
         int pic_index;
-        int max = 100;
+        int max = 10;
 
         public Form1()
         {
@@ -52,7 +52,7 @@ namespace GetPicture
 
         private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressBar1.Value = e.ProgressPercentage;
+            allprogress.Value = e.ProgressPercentage;
             status.Text = e.ProgressPercentage.ToString() + " загружено";
         }
 
@@ -60,12 +60,12 @@ namespace GetPicture
         {
             //MessageBox.Show("Файлы загружены!", "GetPicture");
             status.Text = "Готово";
-            progressBar1.Value = 30;
+            allprogress.Value = max;
         }
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < max; i++)
             {
                 string item = Path.GetFileName(listlinks.Items[i].ToString());
                 string path = Application.StartupPath + @"\" + $"{picname.Text}";
@@ -92,7 +92,7 @@ namespace GetPicture
             listlinks.Items.Clear();
             prev_links.Clear();
             ImgList.Images.Clear();
-            progressBar1.Value = 0;
+            allprogress.Value = 0;
             picname.Text = "";
         }
 
@@ -103,7 +103,7 @@ namespace GetPicture
             listlinks.Items.Clear();
             prev_links.Clear();
             ImgList.Images.Clear();
-            progressBar1.Value = 0;
+            allprogress.Value = 0;
 
             //Parse
             var url = $"https://yandex.ru/images/search?text={item}";
@@ -136,6 +136,7 @@ namespace GetPicture
 
                 LV.LargeImageList = ImgList;
                 ImgList.ColorDepth = ColorDepth.Depth32Bit;
+                LV.LargeImageList.ImageSize = new Size(120, 67);
                 //Список
                 foreach (var picitem in ProductlistItems)
                 {
@@ -144,15 +145,20 @@ namespace GetPicture
                     var picture_url = picitem.Descendants("a").FirstOrDefault().GetAttributeValue("href", "");
                     //Logs
                     prev_links.Add("https:" + picture_preview_url);
+                    
                     ImgList.Images.Add(LoadImage(prev_links[i]));
                     pic_size.Add(picitem.InnerText.Replace("&nbsp;", "").Replace("HD", ""));
                     ListViewItem litem = new ListViewItem(new string[] { picitem.InnerText.Replace("&nbsp;", "").Replace("HD", "") });
                     litem.ImageIndex = i;
-
+                   
 
 
                     LV.Items.Add(litem);
                     var ulink = System.Uri.UnescapeDataString(picture_url);
+                    listlinks.Items.Add(ulink.Replace($"/images/search?pos={i}&amp;img_url=", "")
+                    .Replace($"&amp;text={item}&amp;rpt=simage", ""));
+                    links.Add(ulink.Replace($"/images/search?pos={i}&amp;img_url=", "")
+                    .Replace($"&amp;text={item}&amp;rpt=simage", ""));
                     i++;
                     Text = $"GetPicture" + $" | получаем {i} изображений";
 
@@ -203,7 +209,8 @@ namespace GetPicture
             }
             else
             {
-                MessageBox.Show(Application.ProductName,"er", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Введите слово для поиска изображений!",
+                    Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
         }
@@ -216,10 +223,11 @@ namespace GetPicture
             string pic_url = prev_links[pic_index].ToString();
             var undecodedlink = links[pic_index].ToString();
             var decodelink = System.Uri.UnescapeDataString(undecodedlink);
-
+            Text = decodelink;
             string[] s = pic_size[pic_index].Split('×');
             width_pic = s[0];
             height_pic = s[1];
+            ViewFullPicture(decodelink);
         }
 
         private void linkbox_Click(object sender, EventArgs e)
@@ -432,7 +440,7 @@ namespace GetPicture
             }
         }
 
-        private async void Okbtn_Click(object sender, EventArgs e)
+        private void Okbtn_Click(object sender, EventArgs e)
         {
             string postdata = "/checkcaptcha?key=ea385719-4d32722f-16457e4f-a5fdaa82_2/1642343712/4fded01a60cbdc10b27a13d4f08abd7f_4e6686042915f593ab1f01ffb6019ba3&";
             var encoding = System.Text.Encoding.UTF8;

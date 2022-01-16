@@ -33,14 +33,15 @@ namespace GetPicture
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.status = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.clearbtn = new System.Windows.Forms.Button();
-            this.downloadbtn = new System.Windows.Forms.Button();
+            this.singleprogress = new System.Windows.Forms.ProgressBar();
+            this.allprogress = new System.Windows.Forms.ProgressBar();
+            this.clearbtn = new GetPicture.MButton();
+            this.downloadbtn = new GetPicture.MButton();
             this.listlinks = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.linkbox = new System.Windows.Forms.TextBox();
-            this.searchbtn = new System.Windows.Forms.Button();
+            this.searchbtn = new GetPicture.MButton();
             this.picname = new System.Windows.Forms.TextBox();
             this.LV = new System.Windows.Forms.ListView();
             this.statusStrip1.SuspendLayout();
@@ -66,7 +67,8 @@ namespace GetPicture
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.panel1.Controls.Add(this.progressBar1);
+            this.panel1.Controls.Add(this.singleprogress);
+            this.panel1.Controls.Add(this.allprogress);
             this.panel1.Controls.Add(this.clearbtn);
             this.panel1.Controls.Add(this.downloadbtn);
             this.panel1.Controls.Add(this.listlinks);
@@ -81,25 +83,33 @@ namespace GetPicture
             this.panel1.Size = new System.Drawing.Size(139, 612);
             this.panel1.TabIndex = 4;
             // 
-            // progressBar1
+            // singleprogress
             // 
-            this.progressBar1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.progressBar1.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.progressBar1.Location = new System.Drawing.Point(6, 387);
-            this.progressBar1.Maximum = 30;
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(126, 23);
-            this.progressBar1.TabIndex = 10;
+            this.singleprogress.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.singleprogress.Location = new System.Drawing.Point(6, 387);
+            this.singleprogress.Name = "singleprogress";
+            this.singleprogress.Size = new System.Drawing.Size(126, 23);
+            this.singleprogress.TabIndex = 11;
+            // 
+            // allprogress
+            // 
+            this.allprogress.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.allprogress.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.allprogress.Location = new System.Drawing.Point(6, 413);
+            this.allprogress.Name = "allprogress";
+            this.allprogress.Size = new System.Drawing.Size(126, 23);
+            this.allprogress.TabIndex = 10;
             // 
             // clearbtn
             // 
-            this.clearbtn.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.clearbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
             this.clearbtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.clearbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.clearbtn.ForeColor = System.Drawing.SystemColors.Info;
-            this.clearbtn.Location = new System.Drawing.Point(6, 445);
+            this.clearbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.clearbtn.ForeColor = System.Drawing.Color.Black;
+            this.clearbtn.Location = new System.Drawing.Point(6, 471);
             this.clearbtn.Name = "clearbtn";
-            this.clearbtn.Size = new System.Drawing.Size(126, 23);
+            this.clearbtn.Size = new System.Drawing.Size(125, 28);
             this.clearbtn.TabIndex = 9;
             this.clearbtn.Text = "Очистить";
             this.clearbtn.UseVisualStyleBackColor = false;
@@ -107,14 +117,15 @@ namespace GetPicture
             // 
             // downloadbtn
             // 
-            this.downloadbtn.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.downloadbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
             this.downloadbtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.downloadbtn.Enabled = false;
             this.downloadbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.downloadbtn.ForeColor = System.Drawing.SystemColors.Info;
-            this.downloadbtn.Location = new System.Drawing.Point(6, 416);
+            this.downloadbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.downloadbtn.ForeColor = System.Drawing.Color.Black;
+            this.downloadbtn.Location = new System.Drawing.Point(6, 442);
             this.downloadbtn.Name = "downloadbtn";
-            this.downloadbtn.Size = new System.Drawing.Size(126, 23);
+            this.downloadbtn.Size = new System.Drawing.Size(125, 28);
             this.downloadbtn.TabIndex = 8;
             this.downloadbtn.Text = "Скачать все";
             this.downloadbtn.UseVisualStyleBackColor = false;
@@ -138,7 +149,8 @@ namespace GetPicture
             this.label2.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.label2.Location = new System.Drawing.Point(3, 77);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 13);
+            this.label2.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "Список ссылок ";
             // 
@@ -156,7 +168,7 @@ namespace GetPicture
             // 
             // linkbox
             // 
-            this.linkbox.Location = new System.Drawing.Point(6, 474);
+            this.linkbox.Location = new System.Drawing.Point(6, 512);
             this.linkbox.Name = "linkbox";
             this.linkbox.Size = new System.Drawing.Size(126, 20);
             this.linkbox.TabIndex = 4;
@@ -165,21 +177,23 @@ namespace GetPicture
             // 
             // searchbtn
             // 
-            this.searchbtn.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.searchbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(56)))), ((int)(((byte)(56)))), ((int)(((byte)(56)))));
             this.searchbtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.searchbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.searchbtn.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.searchbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.searchbtn.ForeColor = System.Drawing.Color.Black;
             this.searchbtn.Location = new System.Drawing.Point(6, 44);
             this.searchbtn.Name = "searchbtn";
-            this.searchbtn.Size = new System.Drawing.Size(126, 23);
+            this.searchbtn.Size = new System.Drawing.Size(125, 28);
             this.searchbtn.TabIndex = 3;
             this.searchbtn.Text = "Поиск";
-            this.searchbtn.UseVisualStyleBackColor = false;
+            this.searchbtn.UseVisualStyleBackColor = true;
             this.searchbtn.Click += new System.EventHandler(this.searchbtn_Click_1);
             // 
             // picname
             // 
             this.picname.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.picname.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.picname.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.picname.Location = new System.Drawing.Point(6, 18);
             this.picname.Name = "picname";
@@ -212,6 +226,7 @@ namespace GetPicture
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "GetPicture";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -226,18 +241,19 @@ namespace GetPicture
 
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button searchbtn;
+        private MButton searchbtn;
         private System.Windows.Forms.TextBox picname;
         private System.Windows.Forms.ListView LV;
         private System.Windows.Forms.TextBox linkbox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listlinks;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button downloadbtn;
-        private System.Windows.Forms.Button clearbtn;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private MButton downloadbtn;
+        private MButton clearbtn;
+        private System.Windows.Forms.ProgressBar allprogress;
         private System.Windows.Forms.ToolStripStatusLabel status;
         private System.Windows.Forms.Timer timeout;
+        private System.Windows.Forms.ProgressBar singleprogress;
     }
 }
 
